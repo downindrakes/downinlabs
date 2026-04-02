@@ -6,6 +6,7 @@ services:
       - "--api.insecure=true" # Temporary for testing, will be removed
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
     ports:
       - "80:80"
       - "443:443"
