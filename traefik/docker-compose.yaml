@@ -8,22 +8,10 @@ services:
       - no-new-privileges:true
     hostname: "service.downindrakes.com"
     command:
-# ### providers
-#       - "--providers.docker=true"
-#       - "--providers.docker.exposedbydefault=false"
-#       - "--providers.docker.network=frontend"
-#       - "--providers.file.filename=/dynamic/tls.yaml"
-# ### http entrypoint
-#       - "--entrypoints.web.address=:80"
-#       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-#       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-#       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
-# ### https entrypoint
-#       - "--entrypoints.websecure.address=:443"
-#       - "--entrypoints.websecure.http.tls=true"
-#       - "--entrypoints.websecure.http.encodedCharacters.allowEncodedSlash=false"
-### misc
+
+      - "--providers.file.filename=/dynamic/tls.yaml"
       - "--global.sendAnonymousUsage=false"
+      - "--log.level=DEBUG"
     labels:
       - traefik.http:routers.orthanc.tls=true
       - traefik.http:routers.orthanc.tls.certresolver=cloudflare
@@ -46,3 +34,16 @@ networks:
   frontend:
     name: frontend
     external: true
+#       - "--entrypoints.web.address=:80"
+#       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+#       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+#       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+# ### https entrypoint
+#       - "--entrypoints.websecure.address=:443"
+#       - "--entrypoints.websecure.http.tls=true"
+#       - "--entrypoints.websecure.http.encodedCharacters.allowEncodedSlash=false"
+### misc
+# ### providers
+#       - "--providers.docker=true"
+#       - "--providers.docker.exposedbydefault=false"
+#       - "--providers.docker.network=frontend"
