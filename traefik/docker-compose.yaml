@@ -63,7 +63,7 @@ services:
       # Basic‑auth middleware
       - "traefik.http.middlewares.dashboard-auth.basicauth.users=admin:$$apr1$$PZPTwSfV$$P13xaNNfrRJcS4TRz5ccS."
       - "traefik.http.routers.dashboard.middlewares=dashboard-auth@docker"
-environment:
+    environment:
       - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
       - acme_email=${acme_email}
 networks:
