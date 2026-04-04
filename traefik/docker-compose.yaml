@@ -54,10 +54,9 @@ services:
       # Dashboard router
       - "traefik.http.routers.dashboard.rule=Host(`orthanc.downindrakes.com`)"
       - "traefik.http.routers.dashboard.entrypoints=websecure"
-      - traefik.http:routers.dashboard.tls=true
-      - traefik.http:routers.dashboard.tls.certresolver=cloudflare
+      - "traefik.http:routers.dashboard.tls=true"
+      - "traefik.http:routers.dashboard.tls.certresolver=cloudflare"
       - "traefik.http.routers.dashboard.service=api@internal"
-      - "traefik.http.routers.dashboard.tls=true"
 
       # Basic‑auth middleware
       - "traefik.http.middlewares.dashboard-auth.basicauth.users=admin:$$apr1$$PZPTwSfV$$P13xaNNfrRJcS4TRz5ccS."
