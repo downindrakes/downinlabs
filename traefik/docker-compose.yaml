@@ -7,7 +7,11 @@ services:
       - no-new-privileges:true
     hostname: "service.downindrakes.com"
     command:
-
+### providers
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=frontend"
+      - "--providers.file.filename=/dynamic/tls.yaml"
 ### http entrypoint
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.redirections.entrypoint.to=websecure"
@@ -17,11 +21,10 @@ services:
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.tls=true"
       - "--entrypoints.websecure.http.encodedCharacters.allowEncodedSlash=false"
-### providers
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
 ### misc
       - "--global.sendAnonymousUsage=false"
+
+    labels:
       - "--traefik.http.routers.orthanc.entrypoints=web,websecure"
       - "--traefik.http.routers.orthanc.rule=Host('orthanc.downindrakes.com')"
       - "--traefik.http.routers.orthanc.priority=10"
@@ -29,8 +32,6 @@ services:
       - "--traefik.http.routers.orthanc.tls.certresolver=cloudflare"
       - "--traefik.http.routers.orthanc.tls.options=modern"
       - "--traefik.http.routers.orthanc.tls.domains[0].main=orthanc.downindrakes.com"
-
-
     ports:
       - "80:80"
       - "443:443"
@@ -38,7 +39,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./certs:/certs:rw
       - ./dynamic:/dynamic:ro
-
 networks:
   frontend:
     name: frontend
