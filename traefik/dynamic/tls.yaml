@@ -20,7 +20,7 @@ CertificateResolvers:
   cloudflare:
     acme:
       email: $acme_email
-      storage: /certs/cloudflare-acme.json
+      storage: /mnt/user0/appdata/dockhand/local/traefik/certs/cloudflare-acme.json
       caServer: https://acme_v02.api.letsencrypt.org/directory
       keyType: ec256
       dnsChallenge:

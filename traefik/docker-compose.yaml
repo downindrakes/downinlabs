@@ -9,7 +9,7 @@ services:
     hostname: "service.downindrakes.com"
     command:
       - "--api.insecure=true"
-      - "--providers.file.filename=/dynamic/tls.yaml"
+      - "--providers.file.filename=/mnt/user0/appdata/dockhand/git-repos/orthanc/downinlabs/traefik/dynamic/tls.yaml"
       - "--global.sendAnonymousUsage=false"
       - "--log.level=DEBUG"
     labels:
@@ -23,9 +23,8 @@ services:
       - "8082:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./certs:/certs:rw
-      - ./dynamic:/dynamic:ro
-      - ./static:/static:ro
+      - /mnt/user0/appdata/dockhand/local/traefik/certs:/mnt/user0/appdata/dockhand/local/traefik/certs:rw
+      - ./mnt/user0/appdata/dockhand/git-repos/orthanc/downinlabs/traefik/dynamic:/mnt/user0/appdata/dockhand/git-repos/orthanc/downinlabs/traefik/dynamic:ro
     networks:
       - "frontend"
     environment:
