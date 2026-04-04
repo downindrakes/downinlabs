@@ -13,11 +13,11 @@ services:
     ports:
       - 8096:8096
     labels:
-      - "traefik.enable = true"
-      - "traefik.http.routers.entrypoint = websecure"
-      - "traefik.http.routers.jellyfin.rule = Host(`jellyfin.service.downindrakes.com`)"
-      - "traefik.http.routers.jellyfin.tls.certresolver = le"
-      - "traefik.port = 8096"
+      - "traefik.enable=true"
+      - "traefik.http.routers.entrypoint=websecure"
+      - "traefik.http.routers.jellyfin.rule=Host(`jellyfin.service.downindrakes.com`)"
+      - "traefik.http.routers.jellyfin.tls.certresolver=le"
+      - "traefik.port=8096"
     networks:
       - frontend
     restart: unless-stopped
