@@ -28,7 +28,6 @@ services:
       - "--traefik.http.routers.orthanc.rule=Host('orthanc.downindrakes.com')"
       - "--traefik.http.routers.orthanc.priority=10"
       - "--traefik.http.routers.service=orthanc"
-      - "--traefik.http.routers.service.orthanc.port=90"
       - "--traefik.http.routers.orthanc.tls.certresolver=cloudflare"
       - "--traefik.http.routers.orthanc.tls.options=modern"
       - "--traefik.http.routers.orthanc.tls.domains[0].main=orthanc.downindrakes.com"
