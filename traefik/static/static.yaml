@@ -5,7 +5,7 @@ http:
       entryPoints:
       - web
       service: orthanc-dashboard
-      rule: Host('orthanc.downindrakes.local')
+      rule: Host('orthanc.downindrakes.com')
       tls:
         - true
         - certresolver: le
