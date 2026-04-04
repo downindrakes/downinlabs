@@ -8,29 +8,27 @@ services:
       - no-new-privileges:true
     hostname: "service.downindrakes.com"
     command:
-### providers
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--providers.docker.network=frontend"
-      - "--providers.file.filename=/dynamic/tls.yaml"
-### http entrypoint
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
-### https entrypoint
-      - "--entrypoints.websecure.address=:443"
-      - "--entrypoints.websecure.http.tls=true"
-      - "--entrypoints.websecure.http.encodedCharacters.allowEncodedSlash=false"
+# ### providers
+#       - "--providers.docker=true"
+#       - "--providers.docker.exposedbydefault=false"
+#       - "--providers.docker.network=frontend"
+#       - "--providers.file.filename=/dynamic/tls.yaml"
+# ### http entrypoint
+#       - "--entrypoints.web.address=:80"
+#       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+#       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+#       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+# ### https entrypoint
+#       - "--entrypoints.websecure.address=:443"
+#       - "--entrypoints.websecure.http.tls=true"
+#       - "--entrypoints.websecure.http.encodedCharacters.allowEncodedSlash=false"
 ### misc
       - "--global.sendAnonymousUsage=false"
-      - "--http.routers.orthanc.entrypoints=web,websecure"
-      - "--http.routers.orthanc.rule=Host('orthanc.downindrakes.com')"
-      - "--http.routers.orthanc.priority=10"
-      - "--http.routers.service=orthanc"
-      - "--http.routers.orthanc.tls.certresolver=cloudflare"
-      - "--http.routers.orthanc.tls.options=modern"
-      - "--http.routers.orthanc.tls.domains[0].main=orthanc.downindrakes.com"
+    labels:
+      - traefik.http:routers.orthanc.tls=true
+      - traefik.http:routers.orthanc.tls.certresolver=cloudflare
+      - traefik.http:routers.orthanc.https.entrypoint=websecure
+      - traefik.http:routers.orthanc.rule=Host('orthanc.downindrakes.com')
     ports:
       - "80:80"
       - "443:443"
@@ -38,8 +36,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./certs:/certs:rw
       - ./dynamic:/dynamic:ro
+      - .static:static:ro
     networks:
       - "frontend"
+    environment:
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
+      - acme_email=${acme_email}
 networks:
   frontend:
     name: frontend

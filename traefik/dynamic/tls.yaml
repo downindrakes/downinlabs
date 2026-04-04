@@ -1,16 +1,30 @@
-entrypoints:
+entryPoints:
   web:
-    address: ":80"
-  websecure:
-    address: ":443"
+    address: :80
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+          permanent: true
+    observability:
+      accessLogs: false
+      metrics: false
+      tracing: false
 
+  websecure:
+    address: :443
+    http:
+      tls: {}
 CertificateResolvers:
   cloudflare:
     acme:
       email: $acme_email
-      storage: cloudflare-acme.json
+      storage: /certs/cloudflare-acme.json
       caServer: https://acme_v02.api.letsencrypt.org/directory
       keyType: ec256
       dnsChallenge:
         - "1.1.1.1:53"
         - "8.8.8.8:53"
+providers:
+  docker: {}
