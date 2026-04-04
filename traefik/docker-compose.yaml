@@ -17,7 +17,7 @@ services:
     volumes:
       - /mnt/user0/appdata/dockhand/local/traefik/certs:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /mnt/user0/appdata/dockhand/git-repos/orthanc/downinlabs/traefik/dynamic/:/dynamic:ro
+      - /mnt/user0/appdata/dockhand/git-repos/orthanc/downinlabs/traefik/dynamic:/dynamic:ro
 
     command:
       # EntryPoints
