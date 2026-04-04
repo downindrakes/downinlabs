@@ -31,7 +31,7 @@ services:
       - "--certificatesresolvers.le.acme.dnschallenge=true"
       - "--certificatesresolvers.le.acme.email=${acme_email}"
       - "--certificatesresolvers.le.acme.storage=/certs/acme.json"
-      - "--certificatesresolvers.alpn.acme.caserver=https://acme-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.alpn.acme.caserver=https://acme_v02.api.letsencrypt.org/directory"
       - "--certificatesresolvers.le.acme.keytype=EC384"
       - "--certificatesresolvers.le.acme.dnsChallenge.provider=cloudflare"
       - "--certificatesresolvers.cloudflare-ec384.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53"
