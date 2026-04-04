@@ -12,7 +12,7 @@ services:
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.redirections.entrypoint.to=websecure"
       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-      - "--entrypoints.web.http.redirections.entrypoint.permanend=true"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
 ### https entrypoint
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.websecure.http.tls=true"
