@@ -1,0 +1,18 @@
+http:
+  # Add the router
+  routers:
+    orthanc:
+      entryPoints:
+      - web
+      service: orthanc-dashboard
+      rule: Host('orthanc.downindrakes.local')
+      tls:
+        - true
+        - certresolver: le
+
+  # Add the service
+  services:
+    orthanc-dashboard:
+      loadBalancer:
+        servers:
+        - url: http://10.0.0.53:90
