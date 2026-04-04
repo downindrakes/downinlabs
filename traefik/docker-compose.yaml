@@ -1,15 +1,45 @@
 # docker-compose.yml
 services:
   traefik:
-    image: traefik:latest
+    image: traefik:v3.6
+    container_name: traefik
+    security_opt:
+      - no-new-privileges:true
+    hostname: "service.downindrakes.com"
     command:
-      - "--api.insecure=true" # Temporary for testing, will be removed
-      - "--providers.docker=true"
+
+### http entrypoint
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanend=true"
+### https entrypoint
       - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+      - "--entrypoints.websecure.http.encodedCharacters.allowEncodedSlash=false"
+### providers
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+### misc
+      - "--global.sendAnonymousUsage=false"
+      - "--traefik.http.routers.orthanc.entrypoints=web,websecure"
+      - "--traefik.http.routers.orthanc.rule=Host('orthanc.downindrakes.com')"
+      - "--traefik.http.routers.orthanc.priority=10"
+      - "--traefik.http.routers.service=orthanc"
+      - "--traefik.http.routers.orthanc.tls.certresolver=cloudflare"
+      - "--traefik.http.routers.orthanc.tls.options=modern"
+      - "--traefik.http.routers.orthanc.tls.domains[0].main=orthanc.downindrakes.com"
+
+
     ports:
       - "80:80"
       - "443:443"
-      - "8082:8080"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/certs:rw
+      - ./dynamic:/dynamic:ro
+
+networks:
+  frontend:
+    name: frontend
+    external: true
