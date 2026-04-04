@@ -36,7 +36,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./certs:/certs:rw
       - ./dynamic:/dynamic:ro
-      - .static:static:ro
+      - ./static:/static:ro
     networks:
       - "frontend"
     environment:
