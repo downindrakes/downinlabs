@@ -41,7 +41,7 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=proxy"
-      - "--providers.file.directory=/static/static.yaml"
+      - "--providers.file.directory=/static"
       # API & Dashboard
       - "--api.dashboard=true"
       - "--api.insecure=false"
