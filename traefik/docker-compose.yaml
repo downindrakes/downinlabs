@@ -6,44 +6,97 @@ services:
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
-    hostname: "service.downindrakes.com"
-    command:
-      - "--api.insecure=true"
-      - "--providers.file.filename=/mnt/user0/appdata/dockhand/git-repos/orthanc/downinlabs/traefik/dynamic/tls.yaml"
-      - "--global.sendAnonymousUsage=false"
-      - "--log.level=DEBUG"
-    labels:
-      - traefik.http:routers.orthanc.tls=true
-      - traefik.http:routers.orthanc.tls.certresolver=cloudflare
-      - traefik.http:routers.orthanc.https.entrypoint=websecure
-      - traefik.http:routers.orthanc.rule=Host('orthanc.downindrakes.com')
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8082:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /mnt/user0/appdata/dockhand/local/traefik/certs:/mnt/user0/appdata/dockhand/local/traefik/certs:rw
-      - ./mnt/user0/appdata/dockhand/git-repos/orthanc/downinlabs/traefik/dynamic:/mnt/user0/appdata/dockhand/git-repos/orthanc/downinlabs/traefik/dynamic:ro
+
     networks:
-      - "frontend"
-    environment:
-      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
-      - acme_email=${acme_email}
+      - frontend
+
+    ports:
+    - "80:80"
+    - "443:443"
+
+    volumes:
+      - /mnt/user0/appdata/dockhand/local/traefik/certs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /mnt/user0/appdata/dockhand/git-repos/orthanc/downinlabs/traefik/dynamic/:/dynamic:ro
+
+    command:
+      # EntryPoints
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.websecure.http.tls=true"
+
+      # Attach the static configuration tls.yaml file that contains the tls configuration settings
+      - "--providers.file.filename=/dynamic/tls.yaml"
+
+      # Providers
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=proxy"
+
+      # API & Dashboard
+      - "--api.dashboard=true"
+      - "--api.insecure=false"
+
+# Traefik Dynamic configuration via Docker labels
+    labels:
+      # Enable self‑routing
+      - "traefik.enable=true"
+
+      # Dashboard router
+      - "traefik.http.routers.dashboard.rule=Host(`dashboard.docker.localhost`)"
+      - "traefik.http.routers.dashboard.entrypoints=websecure"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.tls=true"
+
+      # Basic‑auth middleware
+      - "traefik.http.middlewares.dashboard-auth.basicauth.users=admin:$$apr1$$PZPTwSfV$$P13xaNNfrRJcS4TRz5ccS."
+      - "traefik.http.routers.dashboard.middlewares=dashboard-auth@docker"
 networks:
   frontend:
     name: frontend
     external: true
-#       - "--entrypoints.web.address=:80"
-#       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-#       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-#       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
-# ### https entrypoint
-#       - "--entrypoints.websecure.address=:443"
-#       - "--entrypoints.websecure.http.tls=true"
-#       - "--entrypoints.websecure.http.encodedCharacters.allowEncodedSlash=false"
-### misc
-# ### providers
-#       - "--providers.docker=true"
-#       - "--providers.docker.exposedbydefault=false"
-#       - "--providers.docker.network=frontend"
+
+#     hostname: "service.downindrakes.com"
+#     command:
+#       - "--api.insecure=true"
+#       - "--providers.file.filename=/mnt/user0/appdata/dockhand/git-repos/orthanc/downinlabs/traefik/dynamic/tls.yaml"
+#       - "--global.sendAnonymousUsage=false"
+#       - "--log.level=DEBUG"
+#     labels:
+#       - traefik.http:routers.orthanc.tls=true
+#       - traefik.http:routers.orthanc.tls.certresolver=cloudflare
+#       - traefik.http:routers.orthanc.https.entrypoint=websecure
+#       - traefik.http:routers.orthanc.rule=Host('orthanc.downindrakes.com')
+#     ports:
+#       - "80:80"
+#       - "443:443"
+#       - "8082:8080"
+#     volumes:
+#       - /var/run/docker.sock:/var/run/docker.sock:ro
+#       - /mnt/user0/appdata/dockhand/local/traefik/certs:/certs:rw
+#       - ./mnt/user0/appdata/dockhand/git-repos/orthanc/downinlabs/traefik/dynamic:/mnt/user0/appdata/dockhand/git-repos/orthanc/downinlabs/traefik/dynamic:ro
+#     networks:
+#       - "frontend"
+#     environment:
+#       - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
+#       - acme_email=${acme_email}
+# networks:
+#   frontend:
+#     name: frontend
+#     external: true
+# #       - "--entrypoints.web.address=:80"
+# #       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+# #       - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+# #       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+# # ### https entrypoint
+# #       - "--entrypoints.websecure.address=:443"
+# #       - "--entrypoints.websecure.http.tls=true"
+# #       - "--entrypoints.websecure.http.encodedCharacters.allowEncodedSlash=false"
+# ### misc
+# # ### providers
+# #       - "--providers.docker=true"
+# #       - "--providers.docker.exposedbydefault=false"
+# #       - "--providers.docker.network=frontend"
