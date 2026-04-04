@@ -4,6 +4,7 @@ http:
     orthanc:
       entryPoints:
       - web
+      - websecure
       service: orthanc-dashboard
       rule: Host('orthanc.downindrakes.com')
       tls:

@@ -1,0 +1,28 @@
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /mnt/user/appdata/binhex-jellyfin:/config
+      - /var/lib/docker/volumes/binhex-shared/_data:/shared
+      - /mnt/user/plexmedia:/media
+    ports:
+      - 8096:8096
+    labels:
+      - "traefik.enable = true"
+      - "traefik.http.routers.entrypoint = websecure"
+      - "traefik.http.routers.jellyfin.rule = Host(`jellyfin.service.downindrakes.com`)"
+      - "traefik.http.routers.jellyfin.tls.certresolver = le"
+      - "traefik.port = 8096"
+    networks:
+      - frontend
+    restart: unless-stopped
+
+networks:
+  frontend:
+    name: frontend
+    external: true
