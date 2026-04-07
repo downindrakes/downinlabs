@@ -6,10 +6,13 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
+      - JELLYFIN_PublishedServerUrl=http://jellyfin.service.downindrakes.com
     volumes:
       - /mnt/user/appdata/binhex-jellyfin:/config
       - /var/lib/docker/volumes/binhex-shared/_data:/shared
-      - /mnt/user/plexmedia:/media
+      - /mnt/user/plexmedia/Movies:/data/movies
+      - /mnt/user/plexmedia/Shows:/data/tvshows
+
     ports:
       - 8096:8096
     labels:
