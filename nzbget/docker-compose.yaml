@@ -16,8 +16,8 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.entrypoint=websecure"
-      - "traefik.http.routers.radarr.rule=Host(`radarr.service.downindrakes.com`)"
-      - "traefik.http.routers.radarr.tls.certresolver=le"
+      - "traefik.http.routers.nzbget.rule=Host(`nzbget.service.downindrakes.com`)"
+      - "traefik.http.routers.nzbget.tls.certresolver=le"
       - "traefik.port=6780"
     networks:
       - frontend
