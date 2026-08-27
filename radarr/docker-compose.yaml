@@ -20,3 +20,8 @@ services:
     networks:
       - frontend
     restart: unless-stopped
+
+networks:
+  frontend:
+    name: frontend
+    external: true
