@@ -8,10 +8,10 @@ services:
       - TZ=Etc/UTC
     volumes:
       - /mnt/user/appdata/sonarr:/config
-      - /mnt/user/plexmedia/Movies/
-      - /downloads/complete:/downloads #optional
+      - /mnt/user/plexmedia/shows/:/tv
+      - /mnt/user/downloads/completed:/downloads #optional
     ports:
-      - 7878:7878
+      - 8989:8989
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.entrypoint=websecure"

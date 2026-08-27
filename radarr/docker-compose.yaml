@@ -8,8 +8,8 @@ services:
       - TZ=Etc/UTC
     volumes:
       - /mnt/user/appdata/radarr:/config
-      - /mnt/user/plexmedia/Movies/
-      - /downloads/complete:/downloads #optional
+      - /mnt/user/plexmedia/Movies/:/movies
+      - /mnt/user/downloads/completed:/downloads #optional
     ports:
       - 7878:7878
     labels:
