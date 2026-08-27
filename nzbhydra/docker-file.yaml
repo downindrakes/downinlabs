@@ -1,23 +1,22 @@
 services:
-  sonarr:
-    image: lscr.io/linuxserver/sonarr:latest
-    container_name: sonarr
+  nzbhydra2:
+    image: lscr.io/linuxserver/nzbhydra2:latest
+    container_name: nzbhydra2
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Etc/UTC
     volumes:
-      - /mnt/user/appdata/sonarr:/config
-      - /mnt/user/plexmedia/shows/:/tv
-      - /mnt/user/downloads/completed:/downloads #optional
-    ports:
-      - 8989:8989
+      - /mnt/user/appdata/nzbhydra2:/config
+      - /mnt/user/downloads/:/downloads #optional
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.entrypoint=websecure"
       - "traefik.http.routers.sonarr.rule=Host(`sonarr.service.downindrakes.com`)"
       - "traefik.http.routers.sonarr.tls.certresolver=le"
       - "traefik.port=8989"
+    ports:
+      - 5076:5076
     networks:
       - frontend
     restart: unless-stopped
