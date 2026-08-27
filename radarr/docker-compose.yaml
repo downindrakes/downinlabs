@@ -1,0 +1,22 @@
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+    volumes:
+      - /mnt/user/appdata/radarr:/config
+      - /mnt/user/plexmedia/Movies/
+      - /downloads/complete:/downloads #optional
+    ports:
+      - 7878:7878
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.entrypoint=websecure"
+      - "traifik.http.routers.radarr.rule=Host('radarr.service.downindrakes.com"
+      - "traefik.http.routers.radarr.tls.certresolver=le"
+    networks:
+      - frontend
+    restart: unless-stopped
