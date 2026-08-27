@@ -15,8 +15,9 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.entrypoint=websecure"
-      - "traifik.http.routers.radarr.rule=Host('radarr.service.downindrakes.com"
+      - "traefik.http.routers.radarr.rule=Host(`radarr.service.downindrakes.com`)"
       - "traefik.http.routers.radarr.tls.certresolver=le"
+      - "traefik.port=8096"
     networks:
       - frontend
     restart: unless-stopped
